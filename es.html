@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ariel Bailón — Ingeniero Full-Stack y de IA</title>
+<meta name="description" content="Ingeniero full-stack que construye sistemas de IA medibles: agentes, RAG y evals en Python, con pruebas, monitoreo y logging desde el primer día.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230A0B0D%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-family=%27Arial%27 font-weight=%27700%27 font-size=%2738%27 text-anchor=%27middle%27 fill=%27%232D8CFF%27%3EA%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ariel Bailón — Ingeniero Full-Stack y de IA">
+<meta property="og:description" content="Ingeniero full-stack que construye sistemas de IA medibles: agentes, RAG y evals en Python, con pruebas, monitoreo y logging desde el primer día.">
+<meta property="og:locale" content="es_EC">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0A0B0D; --panel:#131519; --raise:#1A1D22; --line:#24272D;
+  --snow:#EAF0F6; --fog:#93A1B1; --dim:#6B7887;
+  --blue:#2D8CFF; --blue-deep:#1A6FE8; --ice:#7DB6FF; --blue-wash:rgba(45,140,255,.14);
+  --head:"Schibsted Grotesk",system-ui,sans-serif; --body:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--night);color:var(--snow);font-family:var(--body);font-size:17px;line-height:1.65}
+a{color:var(--ice);text-underline-offset:4px;text-decoration-thickness:1px}
+a:hover{color:var(--snow)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(10,11,13,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{font-family:var(--head);font-weight:700;font-size:17px;color:var(--snow);text-decoration:none}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:15px}
+.nav ul a{color:var(--fog);text-decoration:none}
+.nav ul a{position:relative;padding:6px 0;transition:color .15s}
+.nav ul a:hover{color:var(--snow)}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--blue);box-shadow:0 0 10px var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav ul a.active{color:var(--snow)}
+.nav ul a.active::after{transform:scaleX(1)}
+section[id]{scroll-margin-top:64px}
+@media (prefers-reduced-motion:reduce){.nav ul a::after{transition:none}}
+.nav .cv{font-size:14.5px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;font-family:var(--mono);font-size:12.5px}
+.lang span,.lang a{padding:5px 11px;border-radius:999px;text-decoration:none;line-height:1}
+.lang span{background:var(--blue);color:#fff}
+.lang a{color:var(--fog)}
+.lang a:hover{color:var(--snow)}
+@media (max-width:760px){.nav ul{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;font-weight:600;font-size:15.5px;text-decoration:none;border:1px solid var(--line);color:var(--snow);background:transparent;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--fog);color:var(--snow)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 0 1px rgba(45,140,255,.4),0 8px 28px -6px rgba(45,140,255,.55)}
+.btn.primary:hover{background:#4D9DFF;border-color:#4D9DFF;color:#fff}
+.btn.small{height:38px;padding:0 16px;font-size:14.5px}
+
+/* hero */
+main{background:radial-gradient(900px 480px at 85% -60px,rgba(45,140,255,.16),transparent 70%)}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:clamp(32px,6vw,80px);align-items:center;min-height:calc(100svh - 64px);padding:clamp(32px,5vw,56px) 0 clamp(48px,7vw,80px)}
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.03em;margin:0 0 24px;max-width:14ch}
+.hero .sub{font-size:clamp(17px,1.6vw,19px);color:var(--fog);margin:0 0 32px;max-width:52ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);font-size:13px;color:var(--fog);margin:0;padding:0;list-style:none}
+.meta li{display:flex;align-items:center;gap:8px}
+.meta li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.photo{margin:0;position:relative;justify-self:end;width:100%;max-width:400px}
+.photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 22%;border-radius:22px;border:1px solid var(--line)}
+.photo figcaption{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(10,11,13,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.photo figcaption b{font-family:var(--head);font-weight:700;font-size:16px}
+.photo figcaption span{font-family:var(--mono);font-size:12.5px;color:var(--fog)}
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ice)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#4ED18A;box-shadow:0 0 0 3px rgba(78,209,138,.18)}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.photo{justify-self:start;max-width:360px}}
+
+/* sections */
+section.block{padding:clamp(48px,6vw,72px) 0}
+.sec-head{margin-bottom:28px}
+.sec-head h2{font-family:var(--head);font-weight:700;font-size:clamp(30px,3.6vw,40px);letter-spacing:-.022em;line-height:1.1;margin:0 0 12px}
+.sec-head p{color:var(--fog);margin:0}
+
+/* work */
+.work{display:grid;gap:0}
+.item{display:grid;grid-template-columns:220px minmax(0,1fr);gap:8px 48px;padding:32px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.ctx{font-family:var(--mono);font-size:13px;color:var(--fog);line-height:1.5;padding-top:8px}
+.ctx b{display:block;color:var(--ice);font-weight:500;margin-bottom:2px}
+.item h3{font-family:var(--head);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin:0 0 10px;line-height:1.1}
+.item .lede{margin:0 0 18px;font-size:18px;max-width:60ch}
+.item ul.points{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:10px}
+.item ul.points li{display:grid;grid-template-columns:22px minmax(0,1fr);color:#C9D3DD;max-width:68ch}
+.item ul.points li::before{content:"";width:12px;height:1.5px;background:var(--blue);margin-top:13px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px;padding:0;list-style:none}
+.tags li{font-family:var(--mono);font-size:12.5px;color:var(--fog);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+.item details{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.item summary{cursor:pointer;list-style:none;padding:13px 18px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;color:var(--snow)}
+.item summary::-webkit-details-marker{display:none}
+.item summary::before{content:"";width:7px;height:7px;border-right:1.6px solid var(--blue);border-bottom:1.6px solid var(--blue);transform:rotate(-45deg);transition:transform .18s}
+.item details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
+.item .more{padding:0 18px 16px 35px;font-size:15.5px;color:var(--fog)}
+.item .more h4{color:var(--snow);font-size:14.5px;margin:12px 0 4px;font-weight:600}
+.item .more p{margin:0 0 6px;max-width:70ch}
+.item .more ul{margin:0;padding-left:18px}
+.item .links{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:16px;font-size:15px;font-weight:500}
+.item .links{align-items:center;gap:10px}
+.ico{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid var(--line);border-radius:999px;color:var(--snow);text-decoration:none;font-size:14.5px;font-weight:500;background:var(--panel);transition:border-color .15s,background .15s,color .15s}
+a.ico:hover{border-color:var(--blue);background:var(--blue-wash);color:#fff}
+.ico svg{flex:none}
+.ico.demo{color:var(--dim);border-style:dashed;background:transparent;cursor:default}
+.ico.demo i{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:1px 8px}
+.wip{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:2px 10px;vertical-align:8px;margin-left:10px;font-weight:400;letter-spacing:0}
+@media (max-width:760px){.item{grid-template-columns:1fr;gap:4px}.ctx{padding-top:0;margin-bottom:6px}.ctx b{display:inline;margin-right:8px}}
+@media (prefers-reduced-motion:reduce){.item summary::before{transition:none}}
+
+/* how I work */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;list-style:none;margin:0 0 20px;padding:0}
+.loop li{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 20px}
+.loop .n{font-family:var(--mono);font-size:12.5px;color:var(--dim)}
+.loop h3{font-family:var(--head);font-size:21px;margin:6px 0 2px;font-weight:700}
+.loop code{font-family:var(--mono);font-size:13px;color:var(--ice)}
+.loop p{margin:10px 0 0;font-size:15px;color:var(--fog)}
+.evidence{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px;padding:20px 0 0;border-top:1px solid var(--line)}
+.evidence p{margin:0;color:var(--fog)}
+.evidence b{color:var(--snow);font-weight:600}
+@media (max-width:860px){.loop{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.loop{grid-template-columns:1fr}}
+
+/* experience */
+.xp{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.xp li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;padding:16px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.xp .role{font-family:var(--head);font-weight:650;font-size:18px}
+.xp .role span{color:var(--fog);font-weight:500}
+.xp .when{font-family:var(--mono);font-size:13px;color:var(--fog);white-space:nowrap}
+.xp p{grid-column:1/-1;margin:0;color:var(--fog);font-size:15.5px;max-width:72ch}
+@media (max-width:600px){.xp li{grid-template-columns:1fr}}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px;border-top:1px solid var(--line)}
+.stack div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.stack .k{font-weight:600;font-size:15px}
+.stack .v{color:var(--fog);font-size:15px}
+@media (max-width:860px){.stack{grid-template-columns:1fr}}
+@media (max-width:480px){.stack div{grid-template-columns:1fr;gap:2px}}
+
+/* contact */
+.contact{padding:clamp(48px,7vw,80px) 0 clamp(40px,6vw,64px);background:radial-gradient(700px 360px at 12% 0,rgba(45,140,255,.12),transparent 70%)}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(32px,6vw,80px);align-items:center}
+.eyebrow{font-family:var(--mono);font-size:13px;color:var(--ice);margin:0 0 16px}
+.contact h2{font-family:var(--head);font-weight:700;font-size:clamp(32px,4.4vw,52px);letter-spacing:-.03em;line-height:1.04;margin:0 0 18px;max-width:17ch}
+.contact .lead{color:var(--fog);font-size:18px;margin:0 0 28px;max-width:50ch}
+.channels{display:grid;gap:10px}
+.channels a{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--snow);transition:border-color .15s}
+.channels a:hover{border-color:var(--blue)}
+.channels span{font-size:13px;color:var(--fog)}
+.channels b{font-weight:500;font-size:15px;overflow-wrap:anywhere;text-align:right}
+@media (max-width:860px){.contact .wrap{grid-template-columns:1fr}}
+@media (max-width:480px){.channels a{flex-direction:column;align-items:flex-start;gap:2px}.channels b{text-align:left}}
+footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Ariel Bailón</a>
+    <ul>
+      <li><a href="#how">Cómo trabajo</a></li>
+      <li><a href="#work">Proyectos</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Idioma"><a href="index.html" hreflang="en" lang="en" aria-label="View in English">EN</a><span aria-current="true">ES</span></div>
+      <a class="btn small cv" href="Ariel-Bailon-Espa%C3%B1ol.pdf" download>Descargar CV</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<div class="wrap">
+  <section class="hero" aria-labelledby="h1">
+    <div>
+      <h1 id="h1">Ingeniero full-stack que construye sistemas de IA medibles.</h1>
+      <p class="sub">Llevo a producción backends en Node.js y NestJS desde 2020. Ahora construyo agentes de IA, RAG y evals en Python, y llevo cada uno por todo el flujo: pruebas, evals, CI, despliegue, monitoreo, logging y trazabilidad.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#work">Ver proyectos</a>
+        <a class="btn" href="mailto:arielbailonn@outlook.es">Escríbeme</a>
+      </div>
+      <ul class="meta">
+        <li>Ingeniero Full-Stack y de IA</li>
+        <li>Manta, Ecuador</li>
+        <li>UTC-5, horario laboral de EE. UU.</li>
+      </ul>
+    </div>
+    <figure class="photo">
+      <img src="ariel-bailon.jpg" alt="Retrato de Ariel Bailón" width="900" height="1350">
+      <figcaption><b>Ariel Bailón</b><span class="status">Abierto a roles remotos</span></figcaption>
+    </figure>
+  </section>
+</div>
+
+<section class="block" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="how-h">Cómo trabajo</h2>
+      <p>Construyo con agentes de código de IA todos los días, sobre <a href="https://ai-blueprint.dev/">AI Blueprint</a>. El plan, las specs y el historial viven como archivos en el repo, y nada se entrega sin pasar su spec.</p>
+    </div>
+    <ol class="loop">
+      <li><span class="n">1</span><h3>Spec</h3><code>/feature</code><p>El agente redacta la spec. Yo defino el alcance, las reglas y qué significa "terminado", y la apruebo.</p></li>
+      <li><span class="n">2</span><h3>Construir</h3><code>/implement</code><p>El agente implementa la spec aprobada paso a paso. Yo reviso cada diff.</p></li>
+      <li><span class="n">3</span><h3>Probar</h3><code>/check</code><p>Pruebas, chequeo de tipos y lint se ejecutan contra la spec. Nada avanza en rojo.</p></li>
+      <li><span class="n">4</span><h3>Cerrar</h3><code>/complete</code><p>La spec se archiva junto al código. Cada bug tiene un registro de arreglo con su causa.</p></li>
+    </ol>
+    <div class="evidence">
+      <p><b>31 specs de features</b> y <b>15 registros de arreglos</b> archivados en tres repos públicos.</p>
+      <p>Busca <code style="font-family:var(--mono);font-size:13px;color:var(--ice)">blueprint/history/</code> en cualquiera de ellos.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="work-h">Proyectos seleccionados</h2>
+      <p>Sistemas de IA que diseñé y construí de punta a punta, y los backends de producción que vinieron antes.</p>
+    </div>
+    <div class="work">
+
+      <article class="item">
+        <div class="ctx"><b>Proyecto personal</b>TypeScript, oct 2026</div>
+        <div>
+          <h3>OrderOps Agent</h3>
+          <p class="lede">Un agente de soporte para una tienda en línea que responde preguntas de políticas, consulta los pedidos del propio cliente y propone reembolsos que una persona aprueba.</p>
+          <ul class="points">
+            <li>Un grafo de agente con cuatro rutas: respuestas de políticas desde los documentos de la tienda, consulta de pedidos mediante tool calls, solicitudes de reembolso y un rechazo para todo lo que esté fuera de alcance.</li>
+            <li>Las reglas de reembolso se aplican en código, no en el prompt, y el agente se pausa hasta que un operador aprueba o rechaza.</li>
+            <li>Recuerda cada conversación y datos útiles de cada cliente, guardados en PostgreSQL.</li>
+            <li>Anthropic, OpenAI y AWS Bedrock detrás de una sola interfaz, con failover automático y prompt caching.</li>
+            <li>41 casos de eval, 13 de ellos adversariales, calificados por un LLM judge y ejecutados en CI con tope de costo. 261 pruebas automatizadas.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>LangGraph.js</li><li>LangChain.js</li><li>PostgreSQL + pgvector</li><li>Prisma</li><li>Zod</li><li>GitHub Actions</li></ul>
+          <details><summary>Decisiones y lo que falló</summary><div class="more">
+            <h4>Por qué las reglas viven en código</h4><p>El modelo convierte el mensaje en una solicitud estructurada; cuatro funciones simples deciden si está permitida. A un prompt se le puede convencer de saltarse una regla. A una función no.</p>
+            <h4>Por qué el agente solo ve tus pedidos</h4><p>El token de sesión del cliente viaja con cada tool call, así que la autorización se queda donde ya vivía.</p>
+            <h4>Lo que falló</h4><p>Guardar cada traza bloqueaba la respuesta en streaming. Ahora la escritura ocurre al final de la solicitud y es de mejor esfuerzo: si falla, se registra y nunca llega al usuario.</p>
+          </div></details>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/order-ops" aria-label="Código fuente en GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Código</span></a><span class="ico demo" aria-disabled="true" title="Demo en vivo próximamente"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Demo en vivo</span><i>pronto</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Proyecto personal</b>Python, sep 2026</div>
+        <div>
+          <h3>EDGAR Analyst</h3>
+          <p class="lede">Responde preguntas sobre empresas públicas a partir de sus reportes a la SEC y sus earnings calls, citando el reporte y la sección exactos. Construido en una semana.</p>
+          <ul class="points">
+            <li>Chunking por secciones sobre reportes 10-K y 10-Q y transcripciones de earnings calls, cerca de 2,400 chunks citables.</li>
+            <li>Rechaza antes de llamar al modelo cuando la evidencia es débil, así que las preguntas fuera de tema no cuestan nada.</li>
+            <li>22 pares de eval etiquetados a mano, evaluados por precisión de citas y relevancia de la respuesta.</li>
+            <li>Cerca de 2 segundos y $0.002 por respuesta, registrados por consulta. 122 pruebas automatizadas.</li>
+          </ul>
+          <ul class="tags"><li>Python</li><li>Anthropic API</li><li>ChromaDB</li><li>sentence-transformers</li><li>Pydantic</li><li>pytest</li></ul>
+          <details><summary>Lo que mostró el eval</summary><div class="more">
+            <p>La precisión de citas es 27%. El modelo no está inventando: el pasaje que el eval espera muchas veces no está entre los cinco recuperados, así que es un problema de retrieval, no de generación. Lo siguiente es probar un top-k mayor, un modelo de embeddings más fuerte y títulos de sección dentro del texto embebido.</p>
+          </div></details>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/edgar-analyst" aria-label="Código fuente en GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Código</span></a><span class="ico demo" aria-disabled="true" title="Demo en vivo próximamente"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Demo en vivo</span><i>pronto</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>En progreso</b>Python, 2026</div>
+        <div>
+          <h3>CodeSage <span class="wip">fase 2 de 4</span></h3>
+          <p class="lede">Responde preguntas sobre un repositorio de código, citando archivo y línea.</p>
+          <ul class="points">
+            <li>Un servicio FastAPI que transmite explicaciones de código estructuradas por SSE.</li>
+            <li>Reintentos con backoff, costo registrado por solicitud y tres prompts versionados con changelog.</li>
+            <li>Código dividido por función y clase con el árbol de sintaxis de Python, documentos divididos por sección, guardados en pgvector.</li>
+            <li>Siguiente: búsqueda híbrida, re-ranking y citas con archivo y línea.</li>
+          </ul>
+          <ul class="tags"><li>Python</li><li>FastAPI</li><li>Pydantic</li><li>PostgreSQL + pgvector</li></ul>
+          <div class="links"><span class="ico demo" aria-disabled="true" title="Demo en vivo próximamente"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Demo en vivo</span><i>pronto</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Producción, en Ultahost</b>Estados Unidos, 2025</div>
+        <div>
+          <h3>APIs de plataforma de hosting</h3>
+          <p class="lede">APIs de backend para una empresa de hosting web, construidas con NestJS y TypeScript.</p>
+          <ul class="points">
+            <li>Reduje los tiempos de respuesta de la API cerca de 35% con optimización de consultas y caché.</li>
+            <li>Construí y mantuve servicios REST y GraphQL integrados con sistemas internos y de terceros.</li>
+            <li>Trabajé en una arquitectura de microservicios sobre MySQL para sistemas de alta disponibilidad.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>TypeScript</li><li>GraphQL</li><li>MySQL</li></ul>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Producción, en Mushroomsoft-IT</b>Quito, 2023 a 2024</div>
+        <div>
+          <h3>Backend de plataforma micro-frontend</h3>
+          <p class="lede">Servicios de backend para una plataforma micro-frontend construida con NestJS y Angular.</p>
+          <ul class="points">
+            <li>Reduje los tiempos de carga cerca de 25% con índices en PostgreSQL y optimización de consultas.</li>
+            <li>Diseñé modelos de datos en PostgreSQL y MongoDB para un sistema con más de 50,000 registros activos.</li>
+            <li>Contenericé las apps con Docker, eliminando los incidentes de configuración del equipo.</li>
+            <li>Lideré revisiones de código semanales y definí estándares de calidad para un equipo de cinco.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>Angular</li><li>PostgreSQL</li><li>MongoDB</li><li>Docker</li></ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="experience" aria-labelledby="xp-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="xp-h">Experiencia</h2></div>
+    <ul class="xp">
+      <li><span class="role">Ingeniero Full-Stack y de IA <span>Independiente</span></span><span class="when">feb 2024 – presente</span><p>Construyo sistemas de IA de punta a punta: OrderOps Agent, EDGAR Analyst y CodeSage.</p></li>
+      <li><span class="role">Desarrollador Backend <span>Ultahost, Estados Unidos</span></span><span class="when">ago 2025 – oct 2025</span><p>APIs en NestJS y GraphQL; tiempos de respuesta reducidos cerca de 35%.</p></li>
+      <li><span class="role">Desarrollador Full Stack <span>Mushroomsoft-IT, Quito</span></span><span class="when">jun 2023 – ene 2024</span><p>Backend micro-frontend; tiempos de carga reducidos cerca de 25%; lideré revisiones de código.</p></li>
+      <li><span class="role">Desarrollador Full Stack <span>Zgameslatam, Manta</span></span><span class="when">jun 2022 – jun 2023</span><p>APIs REST para un ERP interno con cerca de 200 transacciones al día; latencia promedio reducida cerca de 20% con ajustes de NGINX; despliegues en AWS y DigitalOcean.</p></li>
+      <li><span class="role">Desarrollador Full Stack Junior <span>Consulti, Guayaquil</span></span><span class="when">sep 2020 – jun 2022</span><p>APIs en Node.js y Spring Boot para una plataforma de e-commerce con más de 5,000 productos; tiempo de despliegue reducido cerca de 40% con Docker y NGINX.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block" id="stack" aria-labelledby="stack-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="stack-h">Stack</h2></div>
+    <div class="stack">
+      <div><span class="k">IA y LLMs</span><span class="v">Claude, OpenAI, AWS Bedrock, salidas estructuradas, prompt caching</span></div>
+      <div><span class="k">Agentes y RAG</span><span class="v">LangGraph, LangChain, pgvector, ChromaDB, sentence-transformers</span></div>
+      <div><span class="k">Calidad</span><span class="v">Evals, LLM-as-judge, pytest, Vitest, GitHub Actions</span></div>
+      <div><span class="k">Backend</span><span class="v">Python, FastAPI, Node.js, NestJS, TypeScript, REST, GraphQL</span></div>
+      <div><span class="k">Datos</span><span class="v">PostgreSQL, Prisma, MongoDB, MySQL, Redis</span></div>
+      <div><span class="k">Frontend</span><span class="v">React, Next.js, Angular</span></div>
+      <div><span class="k">Infraestructura</span><span class="v">Docker, AWS (EC2, S3), DigitalOcean, NGINX</span></div>
+      <div><span class="k">Idiomas</span><span class="v">Español (nativo), inglés (C1)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Abierto a roles remotos de ingeniería full-stack y de IA</p>
+      <h2 id="c-h">¿Necesitas un ingeniero que lleve la IA del prototipo a producción?</h2>
+      <p class="lead">Construyo el agente, el retrieval, la API que lo rodea y los evals que prueban que funciona. Cuéntame qué estás lanzando y te respondo cómo lo abordaría.</p>
+      <a class="btn primary" href="mailto:arielbailonn@outlook.es">Escríbeme</a>
+    </div>
+    <div class="channels">
+      <a href="mailto:arielbailonn@outlook.es"><span>Correo</span><b>arielbailonn@outlook.es</b></a>
+      <a href="https://www.linkedin.com/in/ariel-b-165445198/"><span>LinkedIn</span><b>in/ariel-b-165445198</b></a>
+      <a href="https://github.com/ArielBailon"><span>GitHub</span><b>github.com/ArielBailon</b></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Ariel Bailón, 2026</div></footer>
+
+<script>
+(function(){
+  var n=document.getElementById('nav');
+  function f(){n.classList.toggle('scrolled',window.scrollY>8)}
+  window.addEventListener('scroll',f,{passive:true});f();
+
+  var links=[].slice.call(document.querySelectorAll('.nav ul a[href^="#"]'));
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  var secs=Object.keys(map).map(function(id){return document.getElementById(id)}).filter(Boolean);
+  function setActive(id){links.forEach(function(a){var on=map[id]===a;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)});
+    },{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){io.observe(s)});
+    window.addEventListener('scroll',function(){
+      if(window.scrollY<200)setActive('');
+      else if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)setActive('contact');
+    },{passive:true});
+  }
+})();
+</script>
+</body>
+</html>

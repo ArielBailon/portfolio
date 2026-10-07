@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ariel Bailón — Full-Stack & AI Engineer</title>
+<meta name="description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in Python, with tests, monitoring and logging from day one.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230A0B0D%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-family=%27Arial%27 font-weight=%27700%27 font-size=%2738%27 text-anchor=%27middle%27 fill=%27%232D8CFF%27%3EA%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ariel Bailón — Full-Stack &amp; AI Engineer">
+<meta property="og:description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in Python, with tests, monitoring and logging from day one.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0A0B0D; --panel:#131519; --raise:#1A1D22; --line:#24272D;
+  --snow:#EAF0F6; --fog:#93A1B1; --dim:#6B7887;
+  --blue:#2D8CFF; --blue-deep:#1A6FE8; --ice:#7DB6FF; --blue-wash:rgba(45,140,255,.14);
+  --head:"Schibsted Grotesk",system-ui,sans-serif; --body:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--night);color:var(--snow);font-family:var(--body);font-size:17px;line-height:1.65}
+a{color:var(--ice);text-underline-offset:4px;text-decoration-thickness:1px}
+a:hover{color:var(--snow)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(10,11,13,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{font-family:var(--head);font-weight:700;font-size:17px;color:var(--snow);text-decoration:none}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:15px}
+.nav ul a{color:var(--fog);text-decoration:none}
+.nav ul a{position:relative;padding:6px 0;transition:color .15s}
+.nav ul a:hover{color:var(--snow)}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--blue);box-shadow:0 0 10px var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav ul a.active{color:var(--snow)}
+.nav ul a.active::after{transform:scaleX(1)}
+section[id]{scroll-margin-top:64px}
+@media (prefers-reduced-motion:reduce){.nav ul a::after{transition:none}}
+.nav .cv{font-size:14.5px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;font-family:var(--mono);font-size:12.5px}
+.lang span,.lang a{padding:5px 11px;border-radius:999px;text-decoration:none;line-height:1}
+.lang span{background:var(--blue);color:#fff}
+.lang a{color:var(--fog)}
+.lang a:hover{color:var(--snow)}
+@media (max-width:760px){.nav ul{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;font-weight:600;font-size:15.5px;text-decoration:none;border:1px solid var(--line);color:var(--snow);background:transparent;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--fog);color:var(--snow)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 0 1px rgba(45,140,255,.4),0 8px 28px -6px rgba(45,140,255,.55)}
+.btn.primary:hover{background:#4D9DFF;border-color:#4D9DFF;color:#fff}
+.btn.small{height:38px;padding:0 16px;font-size:14.5px}
+
+/* hero */
+main{background:radial-gradient(900px 480px at 85% -60px,rgba(45,140,255,.16),transparent 70%)}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:clamp(32px,6vw,80px);align-items:center;min-height:calc(100svh - 64px);padding:clamp(32px,5vw,56px) 0 clamp(48px,7vw,80px)}
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.03em;margin:0 0 24px;max-width:14ch}
+.hero .sub{font-size:clamp(17px,1.6vw,19px);color:var(--fog);margin:0 0 32px;max-width:52ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);font-size:13px;color:var(--fog);margin:0;padding:0;list-style:none}
+.meta li{display:flex;align-items:center;gap:8px}
+.meta li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.photo{margin:0;position:relative;justify-self:end;width:100%;max-width:400px}
+.photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 22%;border-radius:22px;border:1px solid var(--line)}
+.photo figcaption{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(10,11,13,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.photo figcaption b{font-family:var(--head);font-weight:700;font-size:16px}
+.photo figcaption span{font-family:var(--mono);font-size:12.5px;color:var(--fog)}
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ice)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#4ED18A;box-shadow:0 0 0 3px rgba(78,209,138,.18)}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.photo{justify-self:start;max-width:360px}}
+
+/* sections */
+section.block{padding:clamp(48px,6vw,72px) 0}
+.sec-head{margin-bottom:28px}
+.sec-head h2{font-family:var(--head);font-weight:700;font-size:clamp(30px,3.6vw,40px);letter-spacing:-.022em;line-height:1.1;margin:0 0 12px}
+.sec-head p{color:var(--fog);margin:0}
+
+/* work */
+.work{display:grid;gap:0}
+.item{display:grid;grid-template-columns:220px minmax(0,1fr);gap:8px 48px;padding:32px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.ctx{font-family:var(--mono);font-size:13px;color:var(--fog);line-height:1.5;padding-top:8px}
+.ctx b{display:block;color:var(--ice);font-weight:500;margin-bottom:2px}
+.item h3{font-family:var(--head);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin:0 0 10px;line-height:1.1}
+.item .lede{margin:0 0 18px;font-size:18px;max-width:60ch}
+.item ul.points{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:10px}
+.item ul.points li{display:grid;grid-template-columns:22px minmax(0,1fr);color:#C9D3DD;max-width:68ch}
+.item ul.points li::before{content:"";width:12px;height:1.5px;background:var(--blue);margin-top:13px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px;padding:0;list-style:none}
+.tags li{font-family:var(--mono);font-size:12.5px;color:var(--fog);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+.item details{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.item summary{cursor:pointer;list-style:none;padding:13px 18px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;color:var(--snow)}
+.item summary::-webkit-details-marker{display:none}
+.item summary::before{content:"";width:7px;height:7px;border-right:1.6px solid var(--blue);border-bottom:1.6px solid var(--blue);transform:rotate(-45deg);transition:transform .18s}
+.item details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
+.item .more{padding:0 18px 16px 35px;font-size:15.5px;color:var(--fog)}
+.item .more h4{color:var(--snow);font-size:14.5px;margin:12px 0 4px;font-weight:600}
+.item .more p{margin:0 0 6px;max-width:70ch}
+.item .more ul{margin:0;padding-left:18px}
+.item .links{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:16px;font-size:15px;font-weight:500}
+.item .links{align-items:center;gap:10px}
+.ico{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid var(--line);border-radius:999px;color:var(--snow);text-decoration:none;font-size:14.5px;font-weight:500;background:var(--panel);transition:border-color .15s,background .15s,color .15s}
+a.ico:hover{border-color:var(--blue);background:var(--blue-wash);color:#fff}
+.ico svg{flex:none}
+.ico.demo{color:var(--dim);border-style:dashed;background:transparent;cursor:default}
+.ico.demo i{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:1px 8px}
+.wip{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:2px 10px;vertical-align:8px;margin-left:10px;font-weight:400;letter-spacing:0}
+@media (max-width:760px){.item{grid-template-columns:1fr;gap:4px}.ctx{padding-top:0;margin-bottom:6px}.ctx b{display:inline;margin-right:8px}}
+@media (prefers-reduced-motion:reduce){.item summary::before{transition:none}}
+
+/* how I work */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;list-style:none;margin:0 0 20px;padding:0}
+.loop li{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 20px}
+.loop .n{font-family:var(--mono);font-size:12.5px;color:var(--dim)}
+.loop h3{font-family:var(--head);font-size:21px;margin:6px 0 2px;font-weight:700}
+.loop code{font-family:var(--mono);font-size:13px;color:var(--ice)}
+.loop p{margin:10px 0 0;font-size:15px;color:var(--fog)}
+.evidence{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px;padding:20px 0 0;border-top:1px solid var(--line)}
+.evidence p{margin:0;color:var(--fog)}
+.evidence b{color:var(--snow);font-weight:600}
+@media (max-width:860px){.loop{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.loop{grid-template-columns:1fr}}
+
+/* experience */
+.xp{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.xp li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;padding:16px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.xp .role{font-family:var(--head);font-weight:650;font-size:18px}
+.xp .role span{color:var(--fog);font-weight:500}
+.xp .when{font-family:var(--mono);font-size:13px;color:var(--fog);white-space:nowrap}
+.xp p{grid-column:1/-1;margin:0;color:var(--fog);font-size:15.5px;max-width:72ch}
+@media (max-width:600px){.xp li{grid-template-columns:1fr}}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px;border-top:1px solid var(--line)}
+.stack div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.stack .k{font-weight:600;font-size:15px}
+.stack .v{color:var(--fog);font-size:15px}
+@media (max-width:860px){.stack{grid-template-columns:1fr}}
+@media (max-width:480px){.stack div{grid-template-columns:1fr;gap:2px}}
+
+/* contact */
+.contact{padding:clamp(48px,7vw,80px) 0 clamp(40px,6vw,64px);background:radial-gradient(700px 360px at 12% 0,rgba(45,140,255,.12),transparent 70%)}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(32px,6vw,80px);align-items:center}
+.eyebrow{font-family:var(--mono);font-size:13px;color:var(--ice);margin:0 0 16px}
+.contact h2{font-family:var(--head);font-weight:700;font-size:clamp(32px,4.4vw,52px);letter-spacing:-.03em;line-height:1.04;margin:0 0 18px;max-width:17ch}
+.contact .lead{color:var(--fog);font-size:18px;margin:0 0 28px;max-width:50ch}
+.channels{display:grid;gap:10px}
+.channels a{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--snow);transition:border-color .15s}
+.channels a:hover{border-color:var(--blue)}
+.channels span{font-size:13px;color:var(--fog)}
+.channels b{font-weight:500;font-size:15px;overflow-wrap:anywhere;text-align:right}
+@media (max-width:860px){.contact .wrap{grid-template-columns:1fr}}
+@media (max-width:480px){.channels a{flex-direction:column;align-items:flex-start;gap:2px}.channels b{text-align:left}}
+footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Ariel Bailón</a>
+    <ul>
+      <li><a href="#how">How I work</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language"><span aria-current="true">EN</span><a href="es.html" hreflang="es" lang="es" aria-label="Ver en español">ES</a></div>
+      <a class="btn small cv" href="Ariel-Bailon-English.pdf" download>Download CV</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<div class="wrap">
+  <section class="hero" aria-labelledby="h1">
+    <div>
+      <h1 id="h1">Full-stack engineer building AI systems you can measure.</h1>
+      <p class="sub">I've shipped Node.js and NestJS backends in production since 2020. Now I build AI agents, RAG and evals in Python, and take each one through the whole workflow: tests, evals, CI, deploy, monitoring, logging and tracing.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#work">See the work</a>
+        <a class="btn" href="mailto:arielbailonn@outlook.es">Email me</a>
+      </div>
+      <ul class="meta">
+        <li>Full-Stack & AI Engineer</li>
+        <li>Manta, Ecuador</li>
+        <li>UTC-5, US working hours</li>
+      </ul>
+    </div>
+    <figure class="photo">
+      <img src="ariel-bailon.jpg" alt="Portrait of Ariel Bailón" width="900" height="1350">
+      <figcaption><b>Ariel Bailón</b><span class="status">Open to remote roles</span></figcaption>
+    </figure>
+  </section>
+</div>
+
+<section class="block" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="how-h">How I work</h2>
+      <p>I build with AI coding agents every day, on top of <a href="https://ai-blueprint.dev/">AI Blueprint</a>. The plan, specs and history live as files in the repo, and nothing ships without passing its spec.</p>
+    </div>
+    <ol class="loop">
+      <li><span class="n">1</span><h3>Spec</h3><code>/feature</code><p>The agent drafts the spec. I set the scope, the rules and what "done" means, then approve it.</p></li>
+      <li><span class="n">2</span><h3>Build</h3><code>/implement</code><p>The agent implements the approved spec step by step. I review every diff.</p></li>
+      <li><span class="n">3</span><h3>Prove</h3><code>/check</code><p>Tests, type checks and lint run against the spec. Nothing moves on red.</p></li>
+      <li><span class="n">4</span><h3>Land</h3><code>/complete</code><p>The spec is archived next to the code. Every bug gets a fix record with its cause.</p></li>
+    </ol>
+    <div class="evidence">
+      <p><b>31 feature specs</b> and <b>15 fix records</b> archived across three public repos.</p>
+      <p>Look for <code style="font-family:var(--mono);font-size:13px;color:var(--ice)">blueprint/history/</code> in any of them.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="work-h">Selected work</h2>
+      <p>AI systems I designed and built end to end, and the production backends that came before them.</p>
+    </div>
+    <div class="work">
+
+      <article class="item">
+        <div class="ctx"><b>Personal project</b>TypeScript, Oct 2026</div>
+        <div>
+          <h3>OrderOps Agent</h3>
+          <p class="lede">A support agent for an online store that answers policy questions, looks up the customer's own orders and proposes refunds a person approves.</p>
+          <ul class="points">
+            <li>An agent graph with four routes: policy answers from the store's documents, order lookups through tool calls, refund requests, and a refusal for anything out of scope.</li>
+            <li>Refund rules are enforced in code, not in the prompt, and the agent pauses until an operator approves or rejects.</li>
+            <li>Remembers each conversation and useful facts about each customer, stored in PostgreSQL.</li>
+            <li>Anthropic, OpenAI and AWS Bedrock behind one interface, with automatic failover and prompt caching.</li>
+            <li>41 eval cases, 13 of them adversarial, graded by an LLM judge and run in CI with a cost cap. 261 automated tests.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>LangGraph.js</li><li>LangChain.js</li><li>PostgreSQL + pgvector</li><li>Prisma</li><li>Zod</li><li>GitHub Actions</li></ul>
+          <details><summary>Decisions and what broke</summary><div class="more">
+            <h4>Why rules live in code</h4><p>The model turns the message into a structured request; four plain functions decide if it's allowed. A prompt can be talked out of a rule. A function can't.</p>
+            <h4>Why the agent only sees your orders</h4><p>The customer's login token travels with every tool call, so authorization stays where it already lived.</p>
+            <h4>What broke</h4><p>Saving each trace blocked the streamed reply. The write now happens at the end of the request and is best-effort, so a failure is logged and never reaches the user.</p>
+          </div></details>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/order-ops" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Personal project</b>Python, Sep 2026</div>
+        <div>
+          <h3>EDGAR Analyst</h3>
+          <p class="lede">Answers questions about public companies from their SEC filings and earnings calls, citing the exact filing and section. Built in one week.</p>
+          <ul class="points">
+            <li>Section-aware chunking over 10-K and 10-Q filings and earnings-call transcripts, about 2,400 cited chunks.</li>
+            <li>Refuses before calling the model when the evidence is weak, so off-topic questions cost nothing.</li>
+            <li>22 hand-labeled eval pairs scored for citation accuracy and answer relevance.</li>
+            <li>About 2 seconds and $0.002 per answer, logged per query. 122 automated tests.</li>
+          </ul>
+          <ul class="tags"><li>Python</li><li>Anthropic API</li><li>ChromaDB</li><li>sentence-transformers</li><li>Pydantic</li><li>pytest</li></ul>
+          <details><summary>What the eval showed</summary><div class="more">
+            <p>Citation accuracy is 27%. The model isn't inventing things: the passage the eval expects often isn't among the five retrieved, so it's a retrieval problem, not a generation one. Next I'll test a larger top-k, a stronger embedding model and section titles inside the embedded text.</p>
+          </div></details>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/edgar-analyst" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>In progress</b>Python, 2026</div>
+        <div>
+          <h3>CodeSage <span class="wip">phase 2 of 4</span></h3>
+          <p class="lede">Answers questions about a code repository, cited to the file and line.</p>
+          <ul class="points">
+            <li>A FastAPI service that streams structured code explanations over SSE.</li>
+            <li>Retries with backoff, cost tracked per request, and three versioned prompts with a changelog.</li>
+            <li>Code split by function and class using Python's syntax tree, docs split by section, stored in pgvector.</li>
+            <li>Next: hybrid search, re-ranking and file-and-line citations.</li>
+          </ul>
+          <ul class="tags"><li>Python</li><li>FastAPI</li><li>Pydantic</li><li>PostgreSQL + pgvector</li></ul>
+          <div class="links"><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Production, at Ultahost</b>United States, 2025</div>
+        <div>
+          <h3>Hosting platform APIs</h3>
+          <p class="lede">Backend APIs for a web hosting company, built with NestJS and TypeScript.</p>
+          <ul class="points">
+            <li>Cut API response times by about 35% through query optimization and caching.</li>
+            <li>Built and maintained REST and GraphQL services integrated with internal and third-party systems.</li>
+            <li>Worked on a microservices architecture on MySQL for high-availability systems.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>TypeScript</li><li>GraphQL</li><li>MySQL</li></ul>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ctx"><b>Production, at Mushroomsoft-IT</b>Quito, 2023 to 2024</div>
+        <div>
+          <h3>Micro-frontend platform backend</h3>
+          <p class="lede">Backend services for a micro-frontend platform built with NestJS and Angular.</p>
+          <ul class="points">
+            <li>Cut load times by about 25% with PostgreSQL indexing and query optimization.</li>
+            <li>Designed data models in PostgreSQL and MongoDB for a system with 50,000+ active records.</li>
+            <li>Containerized the apps with Docker, ending configuration incidents across the team.</li>
+            <li>Led weekly code reviews and set quality standards for a team of five.</li>
+          </ul>
+          <ul class="tags"><li>NestJS</li><li>Angular</li><li>PostgreSQL</li><li>MongoDB</li><li>Docker</li></ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="experience" aria-labelledby="xp-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="xp-h">Experience</h2></div>
+    <ul class="xp">
+      <li><span class="role">Full-Stack & AI Engineer <span>Independent</span></span><span class="when">Feb 2024 – present</span><p>Building AI systems end to end: OrderOps Agent, EDGAR Analyst and CodeSage.</p></li>
+      <li><span class="role">Backend Developer <span>Ultahost, United States</span></span><span class="when">Aug 2025 – Oct 2025</span><p>NestJS and GraphQL APIs; response times down about 35%.</p></li>
+      <li><span class="role">Full Stack Developer <span>Mushroomsoft-IT, Quito</span></span><span class="when">Jun 2023 – Jan 2024</span><p>Micro-frontend backend; load times down about 25%; led code reviews.</p></li>
+      <li><span class="role">Full Stack Developer <span>Zgameslatam, Manta</span></span><span class="when">Jun 2022 – Jun 2023</span><p>REST APIs for an internal ERP handling about 200 transactions a day; average latency down about 20% through NGINX tuning; deployments on AWS and DigitalOcean.</p></li>
+      <li><span class="role">Junior Full Stack Developer <span>Consulti, Guayaquil</span></span><span class="when">Sep 2020 – Jun 2022</span><p>APIs in Node.js and Spring Boot for an e-commerce platform with 5,000+ products; deploy time down about 40% with Docker and NGINX.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block" id="stack" aria-labelledby="stack-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="stack-h">Stack</h2></div>
+    <div class="stack">
+      <div><span class="k">AI and LLMs</span><span class="v">Claude, OpenAI, AWS Bedrock, structured outputs, prompt caching</span></div>
+      <div><span class="k">Agents and RAG</span><span class="v">LangGraph, LangChain, pgvector, ChromaDB, sentence-transformers</span></div>
+      <div><span class="k">Quality</span><span class="v">Evals, LLM-as-judge, pytest, Vitest, GitHub Actions</span></div>
+      <div><span class="k">Backend</span><span class="v">Python, FastAPI, Node.js, NestJS, TypeScript, REST, GraphQL</span></div>
+      <div><span class="k">Data</span><span class="v">PostgreSQL, Prisma, MongoDB, MySQL, Redis</span></div>
+      <div><span class="k">Frontend</span><span class="v">React, Next.js, Angular</span></div>
+      <div><span class="k">Infra</span><span class="v">Docker, AWS (EC2, S3), DigitalOcean, NGINX</span></div>
+      <div><span class="k">Languages</span><span class="v">Spanish (native), English (C1)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Open to remote full-stack and AI engineering roles</p>
+      <h2 id="c-h">Need an engineer who can take AI from prototype to production?</h2>
+      <p class="lead">I build the agent, the retrieval, the API around it and the evals that prove it works. Tell me what you're shipping and I'll reply with how I'd approach it.</p>
+      <a class="btn primary" href="mailto:arielbailonn@outlook.es">Write to me</a>
+    </div>
+    <div class="channels">
+      <a href="mailto:arielbailonn@outlook.es"><span>Email</span><b>arielbailonn@outlook.es</b></a>
+      <a href="https://www.linkedin.com/in/ariel-b-165445198/"><span>LinkedIn</span><b>in/ariel-b-165445198</b></a>
+      <a href="https://github.com/ArielBailon"><span>GitHub</span><b>github.com/ArielBailon</b></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Ariel Bailón, 2026</div></footer>
+
+<script>
+(function(){
+  var n=document.getElementById('nav');
+  function f(){n.classList.toggle('scrolled',window.scrollY>8)}
+  window.addEventListener('scroll',f,{passive:true});f();
+
+  var links=[].slice.call(document.querySelectorAll('.nav ul a[href^="#"]'));
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  var secs=Object.keys(map).map(function(id){return document.getElementById(id)}).filter(Boolean);
+  function setActive(id){links.forEach(function(a){var on=map[id]===a;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)});
+    },{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){io.observe(s)});
+    window.addEventListener('scroll',function(){
+      if(window.scrollY<200)setActive('');
+      else if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)setActive('contact');
+    },{passive:true});
+  }
+})();
+</script>
+</body>
+</html>
