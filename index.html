@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ariel Bailón — Full-Stack & AI Engineer</title>
-<meta name="description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in Python, with tests, monitoring and logging from day one.">
+<meta name="description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in TypeScript and Python, with tests, monitoring and logging from day one. Live demo: OrderOps Agent.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230A0B0D%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-family=%27Arial%27 font-weight=%27700%27 font-size=%2738%27 text-anchor=%27middle%27 fill=%27%232D8CFF%27%3EA%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#0A0B0D">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ariel Bailón — Full-Stack &amp; AI Engineer">
-<meta property="og:description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in Python, with tests, monitoring and logging from day one.">
+<meta property="og:description" content="Full-stack engineer building AI systems you can measure: agents, RAG and evals in TypeScript and Python, with tests, monitoring and logging from day one. Live demo: OrderOps Agent.">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,7 +188,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
   <section class="hero" aria-labelledby="h1">
     <div>
       <h1 id="h1">Full-stack engineer building AI systems you can measure.</h1>
-      <p class="sub">I've shipped Node.js and NestJS backends in production since 2020. Now I build AI agents, RAG and evals in Python, and take each one through the whole workflow: tests, evals, CI, deploy, monitoring, logging and tracing.</p>
+      <p class="sub">I've shipped Node.js and NestJS backends in production since 2020. Now I build AI agents, RAG and evals in TypeScript and Python, and take each one through the whole workflow: tests, evals, CI, deploy, monitoring, logging and tracing.</p>
       <div class="ctas">
         <a class="btn primary" href="#work">See the work</a>
         <a class="btn" href="mailto:arielbailonn@outlook.es">Email me</a>
@@ -197,6 +197,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
         <li>Full-Stack & AI Engineer</li>
         <li>Manta, Ecuador</li>
         <li>UTC-5, US working hours</li>
+        <li><a href="https://demo.arielbailon.dev">OrderOps is live → demo.arielbailon.dev</a></li>
       </ul>
     </div>
     <figure class="photo">
@@ -234,24 +235,26 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
     <div class="work">
 
       <article class="item">
-        <div class="ctx"><b>Personal project</b>TypeScript, Oct 2026</div>
+        <div class="ctx"><b>Live on AWS</b>TypeScript, Oct 2026</div>
         <div>
           <h3>OrderOps Agent</h3>
-          <p class="lede">A support agent for an online store that answers policy questions, looks up the customer's own orders and proposes refunds a person approves.</p>
+          <p class="lede">A support agent for an online store that answers policy questions, looks up the customer's own orders and proposes refunds a person approves. It runs publicly, with every decision, its cost and its latency visible.</p>
           <ul class="points">
-            <li>An agent graph with four routes: policy answers from the store's documents, order lookups through tool calls, refund requests, and a refusal for anything out of scope.</li>
+            <li>An agent graph with four routes: policy answers from the store's documents, order lookups through tool calls, refund requests, and a refusal for anything out of scope. It remembers each conversation and useful facts about each customer, in PostgreSQL.</li>
             <li>Refund rules are enforced in code, not in the prompt, and the agent pauses until an operator approves or rejects.</li>
-            <li>Remembers each conversation and useful facts about each customer, stored in PostgreSQL.</li>
             <li>Anthropic, OpenAI and AWS Bedrock behind one interface, with automatic failover and prompt caching.</li>
-            <li>41 eval cases, 13 of them adversarial, graded by an LLM judge and run in CI with a cost cap. 261 automated tests.</li>
+            <li>Runs on one AWS EC2 instance behind Caddy with automatic TLS, using an IAM instance role, with no access keys on the server. GitHub Actions checks every pull request, and each merge deploys through OIDC, ECR images tagged by commit, SSM, a smoke test and automatic rollback.</li>
+            <li>Every request is traced in PostgreSQL (route, tools, provider, failover, tokens, cost, latency) and sent to Langfuse as spans per graph node. A dashboard in the demo shows p50/p95 latency, cost per conversation (about $0.012 on a demo-sized load) and failover rate.</li>
+            <li>41 eval cases, 13 of them adversarial: 41/41 on the latest run, and a regression gate in CI on every pull request. 457 automated tests.</li>
           </ul>
-          <ul class="tags"><li>NestJS</li><li>LangGraph.js</li><li>LangChain.js</li><li>PostgreSQL + pgvector</li><li>Prisma</li><li>Zod</li><li>GitHub Actions</li></ul>
+          <ul class="tags"><li>NestJS</li><li>LangGraph.js</li><li>LangChain.js</li><li>PostgreSQL + pgvector</li><li>Prisma</li><li>Zod</li><li>GitHub Actions</li><li>AWS</li><li>Langfuse</li><li>Next.js</li></ul>
           <details><summary>Decisions and what broke</summary><div class="more">
             <h4>Why rules live in code</h4><p>The model turns the message into a structured request; four plain functions decide if it's allowed. A prompt can be talked out of a rule. A function can't.</p>
             <h4>Why the agent only sees your orders</h4><p>The customer's login token travels with every tool call, so authorization stays where it already lived.</p>
+            <h4>Why one EC2 instance</h4><p>It's a demo. ECS Fargate with RDS and a load balancer costs several times more; it's the documented next step to scale.</p>
             <h4>What broke</h4><p>Saving each trace blocked the streamed reply. The write now happens at the end of the request and is best-effort, so a failure is logged and never reaches the user.</p>
           </div></details>
-          <div class="links"><a class="ico" href="https://github.com/ArielBailon/order-ops" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/order-ops" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a><a class="ico" href="https://demo.arielbailon.dev" aria-label="Live demo of OrderOps Agent"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span></a></div>
         </div>
       </article>
 
@@ -270,7 +273,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
           <details><summary>What the eval showed</summary><div class="more">
             <p>Citation accuracy is 27%. The model isn't inventing things: the passage the eval expects often isn't among the five retrieved, so it's a retrieval problem, not a generation one. Next I'll test a larger top-k, a stronger embedding model and section titles inside the embedded text.</p>
           </div></details>
-          <div class="links"><a class="ico" href="https://github.com/ArielBailon/edgar-analyst" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
+          <div class="links"><a class="ico" href="https://github.com/ArielBailon/edgar-analyst" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Code</span></a></div>
         </div>
       </article>
 
@@ -286,7 +289,6 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
             <li>Next: hybrid search, re-ranking and file-and-line citations.</li>
           </ul>
           <ul class="tags"><li>Python</li><li>FastAPI</li><li>Pydantic</li><li>PostgreSQL + pgvector</li></ul>
-          <div class="links"><span class="ico demo" aria-disabled="true" title="Live demo coming soon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Live demo</span><i>soon</i></span></div>
         </div>
       </article>
 
@@ -326,8 +328,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
   <div class="wrap">
     <div class="sec-head"><h2 id="xp-h">Experience</h2></div>
     <ul class="xp">
-      <li><span class="role">Full-Stack & AI Engineer <span>Independent</span></span><span class="when">Feb 2024 – present</span><p>Building AI systems end to end: OrderOps Agent, EDGAR Analyst and CodeSage.</p></li>
-      <li><span class="role">Backend Developer <span>Ultahost, United States</span></span><span class="when">Aug 2025 – Oct 2025</span><p>NestJS and GraphQL APIs; response times down about 35%.</p></li>
+      <li><span class="role">Full-Stack & AI Engineer <span>Independent</span></span><span class="when">Jul 2026 – present</span><p>Building AI systems end to end: OrderOps Agent, EDGAR Analyst and CodeSage.</p></li>
+      <li><span class="role">Backend Developer (Contract) <span>Ultahost, United States</span></span><span class="when">Aug 2025 – Oct 2025</span><p>NestJS and GraphQL APIs; response times down about 35%.</p></li>
       <li><span class="role">Full Stack Developer <span>Mushroomsoft-IT, Quito</span></span><span class="when">Jun 2023 – Jan 2024</span><p>Micro-frontend backend; load times down about 25%; led code reviews.</p></li>
       <li><span class="role">Full Stack Developer <span>Zgameslatam, Manta</span></span><span class="when">Jun 2022 – Jun 2023</span><p>REST APIs for an internal ERP handling about 200 transactions a day; average latency down about 20% through NGINX tuning; deployments on AWS and DigitalOcean.</p></li>
       <li><span class="role">Junior Full Stack Developer <span>Consulti, Guayaquil</span></span><span class="when">Sep 2020 – Jun 2022</span><p>APIs in Node.js and Spring Boot for an e-commerce platform with 5,000+ products; deploy time down about 40% with Docker and NGINX.</p></li>
@@ -341,11 +343,11 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
     <div class="stack">
       <div><span class="k">AI and LLMs</span><span class="v">Claude, OpenAI, AWS Bedrock, structured outputs, prompt caching</span></div>
       <div><span class="k">Agents and RAG</span><span class="v">LangGraph, LangChain, pgvector, ChromaDB, sentence-transformers</span></div>
-      <div><span class="k">Quality</span><span class="v">Evals, LLM-as-judge, pytest, Vitest, GitHub Actions</span></div>
+      <div><span class="k">Quality</span><span class="v">Evals, LLM-as-judge, pytest, Vitest, Langfuse, GitHub Actions CI/CD</span></div>
       <div><span class="k">Backend</span><span class="v">Python, FastAPI, Node.js, NestJS, TypeScript, REST, GraphQL</span></div>
       <div><span class="k">Data</span><span class="v">PostgreSQL, Prisma, MongoDB, MySQL, Redis</span></div>
       <div><span class="k">Frontend</span><span class="v">React, Next.js, Angular</span></div>
-      <div><span class="k">Infra</span><span class="v">Docker, AWS (EC2, S3), DigitalOcean, NGINX</span></div>
+      <div><span class="k">Infra</span><span class="v">Docker, AWS (EC2, ECR, SSM, IAM, CloudWatch, S3), Caddy, DigitalOcean, NGINX</span></div>
       <div><span class="k">Languages</span><span class="v">Spanish (native), English (C1)</span></div>
     </div>
   </div>
