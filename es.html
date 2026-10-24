@@ -94,8 +94,8 @@ section.block{padding:clamp(48px,6vw,72px) 0}
 .item h3{font-family:var(--head);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin:0 0 10px;line-height:1.1}
 .item .lede{margin:0 0 18px;font-size:18px;max-width:60ch}
 .item ul.points{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:10px}
-.item ul.points li{display:grid;grid-template-columns:22px minmax(0,1fr);color:#C9D3DD;max-width:68ch}
-.item ul.points li::before{content:"";width:12px;height:1.5px;background:var(--blue);margin-top:13px}
+.item ul.points li{position:relative;padding-left:22px;color:#C9D3DD;max-width:68ch}
+.item ul.points li::before{content:"";position:absolute;left:0;top:13px;width:12px;height:1.5px;background:var(--blue)}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px;padding:0;list-style:none}
 .tags li{font-family:var(--mono);font-size:12.5px;color:var(--fog);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
 .item details{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
@@ -114,6 +114,7 @@ a.ico:hover{border-color:var(--blue);background:var(--blue-wash);color:#fff}
 .ico svg{flex:none}
 .ico.demo{color:var(--dim);border-style:dashed;background:transparent;cursor:default}
 .ico.demo i{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:1px 8px}
+.item .lede b,.item ul.points b,.item .more b,.xp p b{color:var(--snow);font-weight:600}
 .wip{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--ice);border:1px solid rgba(125,182,255,.4);border-radius:999px;padding:2px 10px;vertical-align:8px;margin-left:10px;font-weight:400;letter-spacing:0}
 @media (max-width:760px){.item{grid-template-columns:1fr;gap:4px}.ctx{padding-top:0;margin-bottom:6px}.ctx b{display:inline;margin-right:8px}}
 @media (prefers-reduced-motion:reduce){.item summary::before{transition:none}}
@@ -197,7 +198,6 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
         <li>Ingeniero Full-Stack y de IA</li>
         <li>Manta, Ecuador</li>
         <li>UTC-5, horario laboral de EE. UU.</li>
-        <li><a href="https://demo.arielbailon.dev">OrderOps en vivo → demo.arielbailon.dev</a></li>
       </ul>
     </div>
     <figure class="photo">
@@ -238,21 +238,23 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
         <div class="ctx"><b>En producción en AWS</b>TypeScript, oct 2026</div>
         <div>
           <h3>OrderOps Agent</h3>
-          <p class="lede">Un agente de soporte para una tienda en línea que responde preguntas de políticas, consulta los pedidos del propio cliente y propone reembolsos que una persona aprueba. Funciona en público, con cada decisión, su costo y su latencia a la vista.</p>
+          <p class="lede">Agente de soporte de una tienda: responde sobre políticas, consulta pedidos y propone reembolsos que aprueba un operador.</p>
           <ul class="points">
-            <li>Un grafo de agente con cuatro rutas: respuestas de políticas desde los documentos de la tienda, consulta de pedidos mediante tool calls, solicitudes de reembolso y un rechazo para todo lo que esté fuera de alcance. Recuerda cada conversación y datos útiles de cada cliente, en PostgreSQL.</li>
-            <li>Las reglas de reembolso se aplican en código, no en el prompt, y el agente se pausa hasta que un operador aprueba o rechaza.</li>
-            <li>Anthropic, OpenAI y AWS Bedrock detrás de una sola interfaz, con failover automático y prompt caching.</li>
-            <li>Corre en una instancia EC2 de AWS detrás de Caddy con TLS automático, con un rol IAM de instancia y sin access keys en el servidor. GitHub Actions revisa cada pull request, y cada merge se despliega con OIDC, imágenes en ECR etiquetadas por commit, SSM, un smoke test y rollback automático.</li>
-            <li>Cada solicitud queda trazada en PostgreSQL (ruta, herramientas, proveedor, failover, tokens, costo, latencia) y se envía a Langfuse como spans por nodo del grafo. Un dashboard en la demo muestra latencia p50/p95, costo por conversación (cerca de $0.012 con carga de demo) y tasa de failover.</li>
-            <li>41 casos de eval, 13 de ellos adversariales: 41/41 en la última corrida, y un control de regresión en CI en cada pull request. 457 pruebas automatizadas.</li>
+            <li>Un grafo de agente con <b>4 rutas</b> (políticas, pedidos, reembolsos, fuera de alcance). Las reglas de reembolso viven en código, no en el prompt, y un operador aprueba cada reembolso.</li>
+            <li>En AWS con CI/CD en GitHub Actions: cada merge se despliega solo, con smoke test y rollback automático.</li>
+            <li>Cada solicitud queda trazada en un dashboard en vivo y en Langfuse: cerca de <b>$0.012</b> por conversación, con latencia p50/p95 y tasa de failover.</li>
+            <li><b>41/41</b> casos de eval aprobados, <b>13</b> de ellos adversariales, como control de regresión en cada pull request. <b>457</b> pruebas automatizadas.</li>
           </ul>
           <ul class="tags"><li>NestJS</li><li>LangGraph.js</li><li>LangChain.js</li><li>PostgreSQL + pgvector</li><li>Prisma</li><li>Zod</li><li>GitHub Actions</li><li>AWS</li><li>Langfuse</li><li>Next.js</li></ul>
-          <details><summary>Decisiones y lo que falló</summary><div class="more">
-            <h4>Por qué las reglas viven en código</h4><p>El modelo convierte el mensaje en una solicitud estructurada; cuatro funciones simples deciden si está permitida. A un prompt se le puede convencer de saltarse una regla. A una función no.</p>
+          <details><summary>Cómo está hecho</summary><div class="more">
+            <h4>Por qué las reglas viven en código</h4><p>El modelo convierte el mensaje en una solicitud estructurada; <b>4</b> funciones simples deciden si está permitida. A un prompt se le puede convencer de saltarse una regla. A una función no.</p>
             <h4>Por qué el agente solo ve tus pedidos</h4><p>El token de sesión del cliente viaja con cada tool call, así que la autorización se queda donde ya vivía.</p>
+            <h4>Modelos y memoria</h4><p>Anthropic, OpenAI y AWS Bedrock detrás de una sola interfaz, con failover automático y prompt caching. El agente recuerda cada conversación y datos útiles de cada cliente, en PostgreSQL.</p>
+            <h4>Despliegue</h4><p>Una instancia EC2 de AWS detrás de Caddy con TLS automático y un rol IAM de instancia, sin access keys en el servidor. Cada pull request corre lint, typecheck, pruebas unitarias y e2e, un chequeo de migraciones y evals sin claves. Cada merge se despliega con OIDC, imágenes en ECR etiquetadas por commit, SSM, un smoke test y rollback automático.</p>
             <h4>Por qué una sola instancia EC2</h4><p>Es una demo. ECS Fargate con RDS y un balanceador de carga cuesta varias veces más; es el siguiente paso documentado para escalar.</p>
-            <h4>Lo que falló</h4><p>Guardar cada traza bloqueaba la respuesta en streaming. Ahora la escritura ocurre al final de la solicitud y es de mejor esfuerzo: si falla, se registra y nunca llega al usuario.</p>
+            <h4>Observabilidad</h4><p>Cada solicitud guarda su ruta, herramientas, proveedor, failover, tokens, costo y latencia en PostgreSQL, más spans de Langfuse por nodo del grafo. La demo muestra cada decisión con su costo y latencia, y un dashboard con latencia p50/p95, costo por conversación y tasa de failover. La cifra de <b>$0.012</b> viene de una carga de demo de <b>40</b> solicitudes.</p>
+            <h4>Evals</h4><p><b>41</b> casos: <b>20</b> normales, <b>8</b> fuera de alcance y <b>13</b> adversariales, todos aprobados en la última corrida. Cada pull request corre los chequeos sin claves y falla si la tasa de aprobación baja más de <b>10%</b>.</p>
+            <h4>Protecciones de la demo pública</h4><p>Límites de solicitudes por IP y por cliente (<b>30</b> mensajes de chat por minuto por cliente), un tope de <b>$1</b> al día en gasto de modelos con una respuesta fija al superarlo, y un reinicio nocturno de los datos.</p>
           </div></details>
           <div class="links"><a class="ico" href="https://github.com/ArielBailon/order-ops" aria-label="Código fuente en GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Código</span></a><a class="ico" href="https://demo.arielbailon.dev" aria-label="Demo en vivo de OrderOps Agent"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14l12-7z"/></svg><span>Demo en vivo</span></a></div>
         </div>
@@ -262,16 +264,16 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
         <div class="ctx"><b>Proyecto personal</b>Python, sep 2026</div>
         <div>
           <h3>EDGAR Analyst</h3>
-          <p class="lede">Responde preguntas sobre empresas públicas a partir de sus reportes a la SEC y sus earnings calls, citando el reporte y la sección exactos. Construido en una semana.</p>
+          <p class="lede">Responde preguntas sobre empresas públicas a partir de sus reportes a la SEC y sus earnings calls, citando el reporte y la sección exactos. Construido en <b>una semana</b>.</p>
           <ul class="points">
-            <li>Chunking por secciones sobre reportes 10-K y 10-Q y transcripciones de earnings calls, cerca de 2,400 chunks citables.</li>
+            <li>Chunking por secciones sobre reportes 10-K y 10-Q y transcripciones de earnings calls, cerca de <b>2,400</b> chunks citables.</li>
             <li>Rechaza antes de llamar al modelo cuando la evidencia es débil, así que las preguntas fuera de tema no cuestan nada.</li>
-            <li>22 pares de eval etiquetados a mano, evaluados por precisión de citas y relevancia de la respuesta.</li>
-            <li>Cerca de 2 segundos y $0.002 por respuesta, registrados por consulta. 122 pruebas automatizadas.</li>
+            <li><b>22</b> pares de eval etiquetados a mano, evaluados por precisión de citas y relevancia de la respuesta.</li>
+            <li>Cerca de <b>2 segundos</b> y <b>$0.002</b> por respuesta, registrados por consulta. <b>122</b> pruebas automatizadas.</li>
           </ul>
           <ul class="tags"><li>Python</li><li>Anthropic API</li><li>ChromaDB</li><li>sentence-transformers</li><li>Pydantic</li><li>pytest</li></ul>
           <details><summary>Lo que mostró el eval</summary><div class="more">
-            <p>La precisión de citas es 27%. El modelo no está inventando: el pasaje que el eval espera muchas veces no está entre los cinco recuperados, así que es un problema de retrieval, no de generación. Lo siguiente es probar un top-k mayor, un modelo de embeddings más fuerte y títulos de sección dentro del texto embebido.</p>
+            <p>La precisión de citas es <b>27%</b>. El modelo no está inventando: el pasaje que el eval espera muchas veces no está entre los cinco recuperados, así que es un problema de retrieval, no de generación. Lo siguiente es probar un top-k mayor, un modelo de embeddings más fuerte y títulos de sección dentro del texto embebido.</p>
           </div></details>
           <div class="links"><a class="ico" href="https://github.com/ArielBailon/edgar-analyst" aria-label="Código fuente en GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg><span>Código</span></a></div>
         </div>
@@ -298,7 +300,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
           <h3>APIs de plataforma de hosting</h3>
           <p class="lede">APIs de backend para una empresa de hosting web, construidas con NestJS y TypeScript.</p>
           <ul class="points">
-            <li>Reduje los tiempos de respuesta de la API cerca de 35% con optimización de consultas y caché.</li>
+            <li>Reduje los tiempos de respuesta de la API cerca de <b>35%</b> con optimización de consultas y caché.</li>
             <li>Construí y mantuve servicios REST y GraphQL integrados con sistemas internos y de terceros.</li>
             <li>Trabajé en una arquitectura de microservicios sobre MySQL para sistemas de alta disponibilidad.</li>
           </ul>
@@ -312,10 +314,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
           <h3>Backend de plataforma micro-frontend</h3>
           <p class="lede">Servicios de backend para una plataforma micro-frontend construida con NestJS y Angular.</p>
           <ul class="points">
-            <li>Reduje los tiempos de carga cerca de 25% con índices en PostgreSQL y optimización de consultas.</li>
-            <li>Diseñé modelos de datos en PostgreSQL y MongoDB para un sistema con más de 50,000 registros activos.</li>
+            <li>Reduje los tiempos de carga cerca de <b>25%</b> con índices en PostgreSQL y optimización de consultas.</li>
+            <li>Diseñé modelos de datos en PostgreSQL y MongoDB para un sistema con más de <b>50,000</b> registros activos.</li>
             <li>Contenericé las apps con Docker, eliminando los incidentes de configuración del equipo.</li>
-            <li>Lideré revisiones de código semanales y definí estándares de calidad para un equipo de cinco.</li>
+            <li>Lideré revisiones de código semanales y definí estándares de calidad para un equipo de <b>cinco</b>.</li>
           </ul>
           <ul class="tags"><li>NestJS</li><li>Angular</li><li>PostgreSQL</li><li>MongoDB</li><li>Docker</li></ul>
         </div>
@@ -329,10 +331,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
     <div class="sec-head"><h2 id="xp-h">Experiencia</h2></div>
     <ul class="xp">
       <li><span class="role">Ingeniero Full-Stack y de IA <span>Independiente</span></span><span class="when">jul 2026 – presente</span><p>Construyo sistemas de IA de punta a punta: OrderOps Agent, EDGAR Analyst y CodeSage.</p></li>
-      <li><span class="role">Desarrollador Backend (Contrato) <span>Ultahost, Estados Unidos</span></span><span class="when">ago 2025 – oct 2025</span><p>APIs en NestJS y GraphQL; tiempos de respuesta reducidos cerca de 35%.</p></li>
-      <li><span class="role">Desarrollador Full Stack <span>Mushroomsoft-IT, Quito</span></span><span class="when">jun 2023 – ene 2024</span><p>Backend micro-frontend; tiempos de carga reducidos cerca de 25%; lideré revisiones de código.</p></li>
-      <li><span class="role">Desarrollador Full Stack <span>Zgameslatam, Manta</span></span><span class="when">jun 2022 – jun 2023</span><p>APIs REST para un ERP interno con cerca de 200 transacciones al día; latencia promedio reducida cerca de 20% con ajustes de NGINX; despliegues en AWS y DigitalOcean.</p></li>
-      <li><span class="role">Desarrollador Full Stack Junior <span>Consulti, Guayaquil</span></span><span class="when">sep 2020 – jun 2022</span><p>APIs en Node.js y Spring Boot para una plataforma de e-commerce con más de 5,000 productos; tiempo de despliegue reducido cerca de 40% con Docker y NGINX.</p></li>
+      <li><span class="role">Desarrollador Backend <span>Ultahost, Estados Unidos</span></span><span class="when">ago 2025 – oct 2025</span><p>APIs en NestJS y GraphQL; tiempos de respuesta reducidos cerca de <b>35%</b>.</p></li>
+      <li><span class="role">Desarrollador Full Stack <span>Mushroomsoft-IT, Quito</span></span><span class="when">jun 2023 – ene 2024</span><p>Backend micro-frontend; tiempos de carga reducidos cerca de <b>25%</b>; lideré revisiones de código.</p></li>
+      <li><span class="role">Desarrollador Full Stack <span>Zgameslatam, Manta</span></span><span class="when">jun 2022 – jun 2023</span><p>APIs REST para un ERP interno con cerca de <b>200</b> transacciones al día; latencia promedio reducida cerca de <b>20%</b> con ajustes de NGINX; despliegues en AWS y DigitalOcean.</p></li>
+      <li><span class="role">Desarrollador Full Stack Junior <span>Consulti, Guayaquil</span></span><span class="when">sep 2020 – jun 2022</span><p>APIs en Node.js y Spring Boot para una plataforma de e-commerce con más de <b>5,000</b> productos; tiempo de despliegue reducido cerca de <b>40%</b> con Docker y NGINX.</p></li>
     </ul>
   </div>
 </section>
@@ -375,6 +377,24 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:13.5px;col
 <script>
 (function(){
   var n=document.getElementById('nav');
+
+  var live=document.createElement('span');live.setAttribute('role','status');
+  live.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap';
+  document.body.appendChild(live);
+  function copy(s){
+    if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(s);
+    return new Promise(function(ok,fail){var t=document.createElement('textarea');t.value=s;t.setAttribute('readonly','');t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.select();var r=document.execCommand('copy');document.body.removeChild(t);r?ok():fail()});
+  }
+  [].forEach.call(document.querySelectorAll('a[href^="mailto:"]'),function(a){
+    var label=a.querySelector('b')||a,orig=label.textContent,timer;
+    a.addEventListener('click',function(){
+      copy(a.getAttribute('href').slice(7)).then(function(){
+        label.textContent='Correo copiado';live.textContent='Correo copiado';
+        clearTimeout(timer);timer=setTimeout(function(){label.textContent=orig;live.textContent=''},2000);
+      },function(){});
+    });
+  });
+
   function f(){n.classList.toggle('scrolled',window.scrollY>8)}
   window.addEventListener('scroll',f,{passive:true});f();
 
